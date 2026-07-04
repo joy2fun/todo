@@ -51,6 +51,10 @@ class ChiaoPanelProvider extends PanelProvider
                     ->url(fn (): string => Settings::getUrl())
                     ->icon('heroicon-o-cog-6-tooth'),
             ])
+             ->renderHook(
+                PanelsRenderHook::TOPBAR_START,
+                fn (): string => view('filament.components.mobile-quick-links')->render(),
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

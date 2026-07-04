@@ -1,5 +1,12 @@
 <div class="container">
-    <h1 wire:click="refreshTodos" style="cursor: pointer">Today's Tasks ↻</h1>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <h1 style="margin:0">Today's Tasks</h1>
+        <a href="/chiao" style="color:#888; font-size:0.9rem">
+            <x-filament::icon
+            icon="heroicon-o-cog"
+            style="width: 1.2rem; height: 1.2rem;"
+        /></a>
+    </div>
 
     <ul class="todo-list">
         @forelse ($this->todos as $todo)
