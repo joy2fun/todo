@@ -25,10 +25,10 @@
         }
 
         body {
-            background-color: #f8f9fa;
+            background-color: #fdf6e3;
             margin: 0;
             padding: 20px;
-            color: #333;
+            color: #586e75;
         }
 
         .container {
@@ -39,7 +39,7 @@
         h1 {
             text-align: center;
             margin: 0 0 20px 0;
-            color: #333;
+            color: #586e75;
             font-size: 1.8rem;
             font-weight: 600;
         }
@@ -49,13 +49,13 @@
         }
 
         .todo-item {
-            background-color: white;
+            background-color: #eee8d5;
             border-radius: 8px;
             padding: 24px 16px;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             position: relative;
             overflow: hidden;
             width: 100%;
@@ -66,7 +66,7 @@
             top: 0;
             left: 0;
             height: 100%;
-            background-color: #e8f5e9;
+            background-color: rgba(133, 153, 0, 0.12);
             z-index: 0;
             border-radius: 8px 0 0 8px;
             width: 0%;
@@ -78,7 +78,7 @@
 
         .todo-icon {
             margin-right: 12px;
-            color: #667eea;
+            color: #93a1a1;
             font-size: 1.2rem;
             font-weight: bold;
             display: flex;
@@ -93,7 +93,7 @@
 
         .todo-item-content {
             font-size: 1.2rem;
-            color: #333;
+            color: #586e75;
             font-weight: 500;
             flex: 1;
             padding-right: 50px;
@@ -103,14 +103,14 @@
 
         .todo-item-meta {
             font-size: 0.85rem;
-            color: #888;
+            color: #839496;
             margin-top: 4px;
             font-weight: 400;
         }
 
         .tick-icon {
-            background-color: #667eea;
-            color: white;
+            background-color: #859900;
+            color: #fdf6e3;
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -121,20 +121,19 @@
             font-size: 1.5rem;
             font-weight: bold;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             position: absolute;
             right: 16px;
             z-index: 3;
         }
 
         .tick-icon:hover {
-            background-color: #764ba2;
-            transform: scale(1.05);
+            background-color: #657b00;
         }
 
         .confirm-text {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #268bd2;
+            color: #fdf6e3;
             padding: 8px 16px;
             border-radius: 6px;
             font-weight: 600;
@@ -146,12 +145,12 @@
             position: absolute;
             right: 16px;
             z-index: 2;
-            box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             font-size: 0.9rem;
         }
 
         .confirm-text:hover {
-            background-color: #45a049;
+            background-color: #1d6fa5;
         }
 
         .todo-item.slide-active .tick-icon {
@@ -225,24 +224,23 @@
         }
 
         .todo-item.completed {
-            background-color: #f8f9fa !important;
-            border-left: 1px solid #4CAF50 !important;
-            opacity: 0.8 !important;
+            background-color: #eee8d5 !important;
+            opacity: 0.7 !important;
         }
 
         .todo-item.completed .todo-item-content {
-            color: #666 !important;
+            color: #657b83 !important;
         }
 
         .todo-item.completed .todo-icon {
-            color: #4CAF50 !important;
+            color: #859900 !important;
             transform: scale(1.2) !important;
             transition: all 0.3s ease !important;
         }
 
         .progress-bar {
             height: 4px;
-            background-color: #e0e0e0;
+            background-color: #eee8d5;
             border-radius: 2px;
             margin-top: 8px;
             overflow: hidden;
@@ -250,19 +248,19 @@
 
         .progress-fill {
             height: 100%;
-            background-color: #667eea;
+            background-color: #268bd2;
             border-radius: 2px;
             transition: width 0.3s ease;
         }
 
         .progress-fill.complete {
-            background-color: #4CAF50;
+            background-color: #859900;
         }
 
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #888;
+            color: #839496;
         }
 
         .empty-state-icon {

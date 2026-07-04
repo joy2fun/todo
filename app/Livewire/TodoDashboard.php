@@ -56,6 +56,8 @@ class TodoDashboard extends Component
         $this->todos = $user->todos()
             ->with('habit')
             ->whereDate('due_date', Carbon::today())
+            ->orderByRaw("status = 'completed' ASC")
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 

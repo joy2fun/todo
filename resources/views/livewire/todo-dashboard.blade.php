@@ -1,7 +1,7 @@
 <div class="container">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
         <h1 style="margin:0">Today's Tasks</h1>
-        <a href="/chiao" style="color:#888; font-size:0.9rem">
+        <a href="/chiao" style="color:#839496; font-size:0.9rem">
             <x-filament::icon
             icon="heroicon-o-cog"
             style="width: 1.2rem; height: 1.2rem;"
@@ -24,7 +24,7 @@
                 <div class="todo-progress-bar" style="width: {{ $progress }}%"></div>
                 <div class="todo-icon">
                     @if ($isCompleted)
-                        &#10003;
+                        <x-filament::icon icon="heroicon-o-check" style="width: 1.2rem; height: 1.2rem;" />
                     @else
                         &bull;
                     @endif
@@ -34,8 +34,10 @@
                 </div>
 
                 @if (! $isCompleted)
-                    <div class="tick-icon" onclick="activateSlide({{ $todo->id }})">&#10003;</div>
-                    <div class="confirm-text" onclick="confirmTodo({{ $todo->id }})">CONFIRM</div>
+                    <div class="tick-icon" onclick="activateSlide({{ $todo->id }})">
+                            <x-filament::icon icon="heroicon-o-check" style="width: 1.5rem; height: 1.5rem;" />
+                        </div>
+                    <div class="confirm-text" onclick="confirmTodo({{ $todo->id }})">DONE</div>
                 @endif
             </li>
         @empty
