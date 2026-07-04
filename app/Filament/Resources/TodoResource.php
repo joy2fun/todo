@@ -136,6 +136,6 @@ class TodoResource extends Resource
 
     public static function mutateQueryBeforeQuery($query): void
     {
-        $query->where('due_date', Carbon::today()->toDateString());
+        $query->whereDate('due_date', Carbon::today());
     }
 }

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ config('app.name', 'Todo') }}</title>
+    <style>
+        html {
+            touch-action: manipulation;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .todo-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #e8f5e9;
+            z-index: 0;
+            border-radius: 8px 0 0 8px;
+            width: 0%;
+        }
+
+        .todo-progress-bar.animate {
+            transition: none;
+        }
+
+        .todo-icon {
+            margin-right: 12px;
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .todo-item-content {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 500;
+            flex: 1;
+            padding-right: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .todo-item-meta {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .tick-icon {
+            background-color: #667eea;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+            position: absolute;
+            right: 16px;
+            z-index: 3;
+        }
+
+        .tick-icon:hover {
+            background-color: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .confirm-text {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(40px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: absolute;
+            right: 16px;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .confirm-text:hover {
+            background-color: #45a049;
+        }
+
+        .todo-item.slide-active .tick-icon {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-100px);
+            pointer-events: none;
+        }
+
+        .todo-item.slide-active .confirm-text {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        .fireworks-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .firework-particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: firework-explosion 0.8s forwards;
+            box-shadow: 0 0 4px currentColor;
+            filter: blur(0.5px);
+        }
+
+        @keyframes firework-explosion {
+            0% {
+                transform: translate(0, 0) scale(0.2);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(var(--final-scale));
+                opacity: 0;
+            }
+        }
+
+        .firework-sparkle {
+            position: absolute;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: sparkle-flash 0.4s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes sparkle-flash {
+            0% {
+                transform: scale(0.1);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(0.6);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        .todo-item.completed {
+            background-color: #f8f9fa !important;
+            border-left: 1px solid #4CAF50 !important;
+            opacity: 0.8 !important;
+        }
+
+        .todo-item.completed .todo-item-content {
+            color: #666 !important;
+        }
+
+        .todo-item.completed .todo-icon {
+            color: #4CAF50 !important;
+            transform: scale(1.2) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background-color: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #667eea;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.complete {
+            background-color: #4CAF50;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #888;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+    </style>
+    @livewireStyles
+</head>
+<body>
+    {{ $slot }}
+    @livewireScripts
+</body>
+</html>
