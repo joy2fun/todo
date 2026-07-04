@@ -34,7 +34,7 @@
 
     <a href="/" title="Home">
         <x-filament::icon
-            icon="heroicon-o-home"
+            icon="heroicon-o-check-circle"
             style="width: 1.5rem; height: 1.5rem;"
         />
     </a>

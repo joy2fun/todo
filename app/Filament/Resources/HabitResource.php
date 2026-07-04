@@ -4,10 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\HabitResource\Pages\ListHabits;
 use App\Models\Habit;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Resources\Resource;
@@ -43,13 +40,11 @@ class HabitResource extends Resource
                             ->required()
                             ->numeric()
                             ->minValue(1)
-                            ->default(1)
-                            ->columnSpanFull(),
+                            ->default(1),
                         Forms\Components\TextInput::make('unit')
                             ->required()
                             ->maxLength(255)
-                            ->default('times')
-                            ->columnSpanFull(),
+                            ->default('times'),
                         Forms\Components\ToggleButtons::make('schedule_days')
                             ->label('Schedule Days')
                             ->options([
@@ -64,14 +59,13 @@ class HabitResource extends Resource
                             ->multiple()
                             ->required()
                             ->default([0, 1, 2, 3, 4, 5, 6])
-                            ->columns(4)
-                            ->grouped()
+                            ->columns(['default' => 2, 'sm' => 4, 'md' => 7])
                             ->columnSpanFull(),
                         Forms\Components\Toggle::make('is_active')
                             ->default(true)
                             ->columnSpanFull(),
                     ])
-                    ->columns(1),
+                    ->columns(2),
             ]);
     }
 
@@ -110,25 +104,12 @@ class HabitResource extends Resource
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Active'),
             ])
+            ->selectable(false)
             ->actions([
                 EditAction::make()
                     ->modalHeading('Edit Habit')
                     ->modalWidth('2xl'),
                 DeleteAction::make(),
-            ])
-            ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ])
-            ->headerActions([
-                CreateAction::make()
-                    ->modalHeading('Create Habit')
-                    ->modalWidth('2xl')
-                    ->mutateFormDataUsing(fn (array $data): array => [
-                        ...$data,
-                        'user_id' => auth()->id(),
-                    ]),
             ]);
     }
 

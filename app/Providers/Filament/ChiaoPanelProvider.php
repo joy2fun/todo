@@ -33,6 +33,7 @@ class ChiaoPanelProvider extends PanelProvider
             ->path('chiao')
             ->login(Login::class)
             ->topNavigation()
+            ->breadcrumbs(false)
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -51,7 +52,7 @@ class ChiaoPanelProvider extends PanelProvider
                     ->url(fn (): string => Settings::getUrl())
                     ->icon('heroicon-o-cog-6-tooth'),
             ])
-             ->renderHook(
+            ->renderHook(
                 PanelsRenderHook::TOPBAR_START,
                 fn (): string => view('filament.components.mobile-quick-links')->render(),
             )
