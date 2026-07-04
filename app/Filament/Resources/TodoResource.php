@@ -23,8 +23,6 @@ class TodoResource extends Resource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-calendar-days';
 
-    protected static string|null|\UnitEnum $navigationGroup = 'Habit Tracking';
-
     protected static ?int $navigationSort = 2;
 
     protected static ?string $modelLabel = 'Today\'s Tasks';

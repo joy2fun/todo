@@ -21,8 +21,6 @@ class CompletionResource extends Resource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-check-circle';
 
-    protected static string|null|\UnitEnum $navigationGroup = 'Habit Tracking';
-
     protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema

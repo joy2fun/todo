@@ -20,6 +20,13 @@ class User extends Authenticatable implements FilamentUser
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public function setting(string $key, mixed $default = null): mixed
+    {
+        $setting = $this->settings()->where('key', $key)->first();
+
+        return $setting ? $setting->value : $default;
+    }
+
     protected function casts(): array
     {
         return [
@@ -46,5 +53,10 @@ class User extends Authenticatable implements FilamentUser
     public function completions(): HasMany
     {
         return $this->hasMany(Completion::class);
+    }
+
+    public function settings(): HasMany
+    {
+        return $this->hasMany(UserSetting::class);
     }
 }

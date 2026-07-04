@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Todo') }}</title>
+    @php
+        $iconPath = auth()->user()?->setting('icon');
+        $iconUrl = $iconPath ? Illuminate\Support\Facades\Storage::disk('public')->url($iconPath) : null;
+    @endphp
+    @if ($iconUrl)
+        <link rel="icon" type="image/png" href="{{ $iconUrl }}">
+        <link rel="apple-touch-icon" href="{{ $iconUrl }}">
+    @endif
     <style>
         html {
             touch-action: manipulation;

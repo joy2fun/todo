@@ -1,5 +1,5 @@
 <div class="container">
-    <h1>Today's Tasks</h1>
+    <h1 wire:click="refreshTodos" style="cursor: pointer">Today's Tasks ↻</h1>
 
     <ul class="todo-list">
         @forelse ($this->todos as $todo)

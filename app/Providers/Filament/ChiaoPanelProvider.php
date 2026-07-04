@@ -3,6 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Pages\Settings;
+use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -11,6 +13,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -29,6 +32,7 @@ class ChiaoPanelProvider extends PanelProvider
             ->id('chiao')
             ->path('chiao')
             ->login(Login::class)
+            ->topNavigation()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -41,6 +45,11 @@ class ChiaoPanelProvider extends PanelProvider
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
+            ])
+            ->userMenuItems([
+                Action::make('settings')
+                    ->url(fn (): string => Settings::getUrl())
+                    ->icon('heroicon-o-cog-6-tooth'),
             ])
             ->middleware([
                 EncryptCookies::class,
