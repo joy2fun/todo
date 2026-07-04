@@ -14,7 +14,7 @@ class ListTodos extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            Actions\Action::make('generate')
                 ->label('Generate Today\'s Tasks')
                 ->icon('heroicon-o-arrow-path')
                 ->action(function () {

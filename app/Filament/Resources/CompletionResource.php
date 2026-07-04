@@ -30,17 +30,22 @@ class CompletionResource extends Resource
         return $schema
             ->schema([
                 Section::make()
+                    ->columnSpanFull()
+                    ->columns(1)
                     ->schema([
                         Forms\Components\Select::make('todo_id')
                             ->relationship('todo', 'id', fn ($query) => $query->with('habit'))
                             ->getOptionLabelFromRecordUsing(fn ($record) => $record->habit->name.' — '.$record->due_date)
                             ->required()
-                            ->disabled(),
+                            ->disabled()
+                            ->columnSpanFull(),
                         Forms\Components\DateTimePicker::make('completed_at')
-                            ->required(),
+                            ->required()
+                            ->columnSpanFull(),
                         Forms\Components\Textarea::make('note')
                             ->rows(3)
-                            ->maxLength(1000),
+                            ->maxLength(1000)
+                            ->columnSpanFull(),
                     ]),
             ]);
     }
@@ -54,7 +59,7 @@ class CompletionResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('completed_at')
-                    ->dateTime()
+                    ->since()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('note')
                     ->limit(50)
@@ -66,7 +71,8 @@ class CompletionResource extends Resource
             ])
             ->defaultSort('completed_at', 'desc')
             ->actions([
-                EditAction::make(),
+                EditAction::make()
+                    ->modalWidth('2xl'),
                 DeleteAction::make(),
             ])
             ->bulkActions([

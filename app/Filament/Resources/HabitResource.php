@@ -5,12 +5,12 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\HabitResource\Pages\ListHabits;
 use App\Models\Habit;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Resources\Resource;
-use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -31,41 +31,49 @@ class HabitResource extends Resource
         return $schema
             ->schema([
                 Section::make()
+                    ->columnSpanFull()
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->columnSpanFull(),
                         Forms\Components\Textarea::make('description')
                             ->rows(3)
-                            ->maxLength(1000),
-                        Grid::make(2)
-                            ->schema([
-                                Forms\Components\TextInput::make('target_count')
-                                    ->required()
-                                    ->numeric()
-                                    ->minValue(1)
-                                    ->default(1),
-                                Forms\Components\TextInput::make('unit')
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->default('times'),
-                            ]),
-                        Forms\Components\CheckboxList::make('schedule_days')
+                            ->maxLength(1000)
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('target_count')
+                            ->required()
+                            ->numeric()
+                            ->minValue(1)
+                            ->default(1)
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('unit')
+                            ->required()
+                            ->maxLength(255)
+                            ->default('times')
+                            ->columnSpanFull(),
+                        Forms\Components\ToggleButtons::make('schedule_days')
                             ->label('Schedule Days')
                             ->options([
-                                0 => 'Sunday',
-                                1 => 'Monday',
-                                2 => 'Tuesday',
-                                3 => 'Wednesday',
-                                4 => 'Thursday',
-                                5 => 'Friday',
-                                6 => 'Saturday',
+                                0 => 'Sun',
+                                1 => 'Mon',
+                                2 => 'Tue',
+                                3 => 'Wed',
+                                4 => 'Thu',
+                                5 => 'Fri',
+                                6 => 'Sat',
                             ])
+                            ->multiple()
                             ->required()
-                            ->columns(7),
+                            ->default([0, 1, 2, 3, 4, 5, 6])
+                            ->columns(4)
+                            ->grouped()
+                            ->columnSpanFull(),
                         Forms\Components\Toggle::make('is_active')
-                            ->default(true),
-                    ]),
+                            ->default(true)
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(1),
             ]);
     }
 
@@ -99,18 +107,30 @@ class HabitResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Active'),
             ])
             ->actions([
-                EditAction::make(),
+                EditAction::make()
+                    ->modalHeading('Edit Habit')
+                    ->modalWidth('2xl'),
                 DeleteAction::make(),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                CreateAction::make()
+                    ->modalHeading('Create Habit')
+                    ->modalWidth('2xl')
+                    ->mutateFormDataUsing(fn (array $data): array => [
+                        ...$data,
+                        'user_id' => auth()->id(),
+                    ]),
             ]);
     }
 

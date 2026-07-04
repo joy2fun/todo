@@ -34,29 +34,36 @@ class TodoResource extends Resource
         return $schema
             ->schema([
                 Section::make()
+                    ->columnSpanFull()
+                    ->columns(1)
                     ->schema([
                         Forms\Components\Select::make('habit_id')
                             ->relationship('habit', 'name')
                             ->required()
-                            ->disabled(),
+                            ->disabled()
+                            ->columnSpanFull(),
                         Forms\Components\DatePicker::make('due_date')
                             ->required()
-                            ->disabled(),
+                            ->disabled()
+                            ->columnSpanFull(),
                         Forms\Components\TextInput::make('target_count')
                             ->required()
                             ->numeric()
-                            ->disabled(),
+                            ->disabled()
+                            ->columnSpanFull(),
                         Forms\Components\TextInput::make('completed_count')
                             ->required()
                             ->numeric()
-                            ->disabled(),
+                            ->disabled()
+                            ->columnSpanFull(),
                         Forms\Components\Select::make('status')
                             ->options([
                                 'pending' => 'Pending',
                                 'completed' => 'Completed',
                                 'skipped' => 'Skipped',
                             ])
-                            ->required(),
+                            ->required()
+                            ->columnSpanFull(),
                     ]),
             ]);
     }
@@ -112,7 +119,8 @@ class TodoResource extends Resource
                         ]);
                     })
                     ->visible(fn (Todo $record): bool => $record->status === 'pending'),
-                EditAction::make(),
+                EditAction::make()
+                    ->modalWidth('2xl'),
                 DeleteAction::make(),
             ])
             ->bulkActions([
