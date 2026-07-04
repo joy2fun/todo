@@ -125,6 +125,9 @@
             position: absolute;
             right: 16px;
             z-index: 3;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .tick-icon:hover {
@@ -139,7 +142,7 @@
             font-weight: 600;
             cursor: pointer;
             opacity: 0;
-            visibility: hidden;
+            pointer-events: none;
             transform: translateX(40px);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: absolute;
@@ -147,6 +150,9 @@
             z-index: 2;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             font-size: 0.9rem;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
 
         .confirm-text:hover {
@@ -155,14 +161,12 @@
 
         .todo-item.slide-active .tick-icon {
             opacity: 0;
-            visibility: hidden;
             transform: translateX(-100px);
             pointer-events: none;
         }
 
         .todo-item.slide-active .confirm-text {
             opacity: 1;
-            visibility: visible;
             transform: translateX(0);
             pointer-events: auto;
         }

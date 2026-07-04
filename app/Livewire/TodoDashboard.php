@@ -15,6 +15,12 @@ class TodoDashboard extends Component
 
     public function mount(): void
     {
+        $user = auth()->user();
+
+        if ($user) {
+            app(TodoGenerationService::class)->getTodaysTodos($user);
+        }
+
         $this->loadTodos();
     }
 
@@ -50,15 +56,12 @@ class TodoDashboard extends Component
             return;
         }
 
-        $service = app(TodoGenerationService::class);
-        $service->getTodaysTodos($user);
-
         $this->todos = $user->todos()
-            ->with('habit')
+            ->with('habit:id,name')
             ->whereDate('due_date', Carbon::today())
             ->orderByRaw("status = 'completed' ASC")
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get(['id', 'target_count', 'completed_count', 'status', 'habit_id', 'due_date']);
     }
 
     public function render()
