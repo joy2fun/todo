@@ -91,4 +91,9 @@ class CompletionResource extends Resource
             'index' => ListCompletions::route('/'),
         ];
     }
+
+    public static function mutateQueryBeforeQuery($query): void
+    {
+        $query->where('user_id', auth()->id());
+    }
 }

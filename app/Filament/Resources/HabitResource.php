@@ -80,7 +80,8 @@ class HabitResource extends Resource
                     ->label('Target')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('unit')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('schedule_days')
                     ->label('Schedule')
                     ->formatStateUsing(function ($state): string {
@@ -123,5 +124,10 @@ class HabitResource extends Resource
         return [
             'index' => ListHabits::route('/'),
         ];
+    }
+
+    public static function mutateQueryBeforeQuery($query): void
+    {
+        $query->where('user_id', auth()->id());
     }
 }

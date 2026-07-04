@@ -5,9 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TodoResource\Pages\ListTodos;
 use App\Models\Todo;
 use Filament\Actions\Action;
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Resources\Resource;
@@ -76,7 +74,8 @@ class TodoResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('due_date')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('completed_count')
                     ->label('Progress')
                     ->formatStateUsing(fn ($state, Todo $record): string => "{$state} / {$record->target_count}")
@@ -121,11 +120,7 @@ class TodoResource extends Resource
                     ->modalWidth('2xl'),
                 DeleteAction::make(),
             ])
-            ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->selectable(false);
     }
 
     public static function getRelations(): array
@@ -142,6 +137,8 @@ class TodoResource extends Resource
 
     public static function mutateQueryBeforeQuery($query): void
     {
-        $query->whereDate('due_date', Carbon::today());
+        $query
+            ->where('user_id', auth()->id())
+            ->whereDate('due_date', Carbon::today());
     }
 }
