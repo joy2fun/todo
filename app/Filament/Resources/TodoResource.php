@@ -13,6 +13,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 class TodoResource extends Resource
@@ -135,9 +136,9 @@ class TodoResource extends Resource
         ];
     }
 
-    public static function mutateQueryBeforeQuery($query): void
+    public static function getEloquentQuery(): Builder
     {
-        $query
+        return parent::getEloquentQuery()
             ->where('user_id', auth()->id())
             ->whereDate('due_date', Carbon::today());
     }

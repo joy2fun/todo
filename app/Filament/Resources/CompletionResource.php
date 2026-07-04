@@ -14,6 +14,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class CompletionResource extends Resource
 {
@@ -92,8 +93,8 @@ class CompletionResource extends Resource
         ];
     }
 
-    public static function mutateQueryBeforeQuery($query): void
+    public static function getEloquentQuery(): Builder
     {
-        $query->where('user_id', auth()->id());
+        return parent::getEloquentQuery()->where('user_id', auth()->id());
     }
 }
