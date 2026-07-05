@@ -12,6 +12,9 @@
     @if ($iconUrl)
         <link rel="icon" type="image/png" href="{{ $iconUrl }}">
         <link rel="apple-touch-icon" href="{{ $iconUrl }}">
+    @else
+        <link rel="icon" type="image/png" href="favicon.png">
+        <link rel="apple-touch-icon" href="/favicon.png">
     @endif
     <style>
         html {
@@ -277,5 +280,14 @@
 <body>
     {{ $slot }}
     @livewireScripts
+    <script src="/js/pulltorefresh.js"></script>
+    <script>
+        const ptr = PullToRefresh.init({
+            mainElement: 'body',
+            onRefresh() {
+                window.location.reload();
+            }
+        });
+    </script>
 </body>
 </html>
