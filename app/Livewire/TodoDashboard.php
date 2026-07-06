@@ -13,11 +13,14 @@ class TodoDashboard extends Component
     /** @var Collection */
     public $todos = [];
 
+    public string $headTitle = '';
+
     public function mount(): void
     {
         $user = auth()->user();
 
         if ($user) {
+            $this->headTitle = $user->setting('head_title', 'Today\'s Tasks');
             app(TodoGenerationService::class)->getTodaysTodos($user);
         }
 

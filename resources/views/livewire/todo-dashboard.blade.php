@@ -1,6 +1,6 @@
 <div class="container">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <h1 style="margin:0">Today's Tasks</h1>
+        <h1 style="margin:0">{{ $headTitle ?: "Today's Tasks" }}</h1>
         <a href="/chiao" style="color:#839496; font-size:0.9rem">
             <x-filament::icon
             icon="heroicon-o-cog"

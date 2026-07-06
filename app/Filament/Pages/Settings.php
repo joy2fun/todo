@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Actions;
@@ -22,6 +23,7 @@ class Settings extends Page
     {
         $this->form->fill([
             'icon' => auth()->user()->setting('icon'),
+            'head_title' => auth()->user()->setting('head_title'),
         ]);
     }
 
@@ -30,6 +32,9 @@ class Settings extends Page
         return $schema
             ->components([
                 Form::make([
+                    TextInput::make('head_title')
+                        ->label('Page Title')
+                        ->placeholder('Today\'s Tasks'),
                     FileUpload::make('icon')
                         ->image()
                         ->disk('public')
