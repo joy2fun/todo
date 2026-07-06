@@ -52,11 +52,15 @@
 @script
 <script>
     if (window.navigator.standalone) {
-        window.addEventListener('pageshow', function(e) {
-            if (e.persisted) {
-                setTimeout(function() {
-                    $wire.$refresh();
-                }, 100);
+        var _firstVisible = true;
+
+        document.addEventListener('visibilitychange', function() {
+            if (_firstVisible) {
+                _firstVisible = false;
+                return;
+            }
+            if (!document.hidden) {
+                setTimeout(function() { $wire.$refresh(); }, 100);
             }
         });
     }
