@@ -32,7 +32,35 @@
         }
     </style>
 
-    <a href="/" title="Home">
+    <a href="/" title="Today's Tasks">
+        <x-filament::icon
+            icon="heroicon-o-home"
+            style="width: 1.5rem; height: 1.5rem;"
+        />
+    </a>
+
+    <a href="{{ url('/chiao') }}" title="Dashboard">
+        <x-filament::icon
+            icon="heroicon-o-squares-2x2"
+            style="width: 1.5rem; height: 1.5rem;"
+        />
+    </a>
+
+    <a href="{{ url('/chiao/habits') }}" title="Habits">
+        <x-filament::icon
+            icon="heroicon-o-check-badge"
+            style="width: 1.5rem; height: 1.5rem;"
+        />
+    </a>
+
+    <a href="{{ url('/chiao/todos') }}" title="All Todos">
+        <x-filament::icon
+            icon="heroicon-o-calendar-days"
+            style="width: 1.5rem; height: 1.5rem;"
+        />
+    </a>
+
+    <a href="{{ url('/chiao/completions') }}" title="Completions">
         <x-filament::icon
             icon="heroicon-o-check-circle"
             style="width: 1.5rem; height: 1.5rem;"
