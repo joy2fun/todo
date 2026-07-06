@@ -270,12 +270,12 @@
         }
 
         .habit-completed-count .x-symbol {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 600;
         }
 
         .habit-completed-count .count-number {
-            font-size: 3.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             line-height: 1;
         }

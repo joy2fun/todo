@@ -13,6 +13,9 @@ class TodoDashboard extends Component
     /** @var Collection */
     public $todos = [];
 
+    /** @var array<int, int> */
+    public array $habitCompletedCounts = [];
+
     public string $headTitle = '';
 
     public function mount(): void
@@ -67,15 +70,14 @@ class TodoDashboard extends Component
             ->get(['id', 'target_count', 'completed_count', 'status', 'habit_id', 'due_date']);
 
         if ($this->todos->isNotEmpty()) {
-            $counts = Todo::whereIn('habit_id', $this->todos->pluck('habit_id'))
+            $this->habitCompletedCounts = Todo::whereIn('habit_id', $this->todos->pluck('habit_id'))
                 ->where('status', 'completed')
                 ->groupBy('habit_id')
                 ->selectRaw('habit_id, count(*) as count')
-                ->pluck('count', 'habit_id');
-
-            foreach ($this->todos as $todo) {
-                $todo->habit_completed_todos_count = $counts[$todo->habit_id] ?? 0;
-            }
+                ->pluck('count', 'habit_id')
+                ->toArray();
+        } else {
+            $this->habitCompletedCounts = [];
         }
     }
 

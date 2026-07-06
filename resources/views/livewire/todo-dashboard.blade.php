@@ -39,7 +39,7 @@
                         </div>
                     <div class="confirm-text" onclick="confirmTodo({{ $todo->id }})">DONE</div>
                 @else
-                    <div class="habit-completed-count"><span class="count-inner"><span class="x-symbol">x</span><span class="count-number">{{ $todo->habit_completed_todos_count }}</span></span></div>
+                    <div class="habit-completed-count"><span class="count-inner"><span class="x-symbol">x</span><span class="count-number">{{ $habitCompletedCounts[$todo->habit_id] ?? 0 }}</span></span></div>
                 @endif
             </li>
         @empty
