@@ -38,6 +38,8 @@
                             <x-filament::icon icon="heroicon-o-check" style="width: 1.5rem; height: 1.5rem;" />
                         </div>
                     <div class="confirm-text" onclick="confirmTodo({{ $todo->id }})">DONE</div>
+                @else
+                    <div class="habit-completed-count"><span class="count-inner"><span class="x-symbol">x</span><span class="count-number">{{ $todo->habit_completed_todos_count }}</span></span></div>
                 @endif
             </li>
         @empty

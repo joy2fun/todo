@@ -99,7 +99,7 @@
             color: #586e75;
             font-weight: 500;
             flex: 1;
-            padding-right: 50px;
+            padding-right: 80px;
             position: relative;
             z-index: 1;
         }
@@ -140,8 +140,8 @@
         .confirm-text {
             background-color: #268bd2;
             color: #fdf6e3;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 0 20px;
+            border-radius: 0 8px 8px 0;
             font-weight: 600;
             cursor: pointer;
             opacity: 0;
@@ -149,10 +149,15 @@
             transform: translateX(40px);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: absolute;
-            right: 16px;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             z-index: 2;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            font-size: 0.9rem;
+            font-size: 1rem;
             outline: none;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
@@ -243,6 +248,36 @@
             color: #859900 !important;
             transform: scale(1.2) !important;
             transition: all 0.3s ease !important;
+        }
+
+        .habit-completed-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 1;
+            user-select: none;
+            color: #93a1a1;
+            opacity: 0.5;
+        }
+
+        .habit-completed-count .count-inner {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .habit-completed-count .x-symbol {
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+
+        .habit-completed-count .count-number {
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 1;
         }
 
         .progress-bar {

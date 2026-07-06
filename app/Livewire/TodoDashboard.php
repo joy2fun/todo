@@ -6,6 +6,7 @@ use App\Models\Todo;
 use App\Services\TodoGenerationService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class TodoDashboard extends Component
@@ -61,10 +62,16 @@ class TodoDashboard extends Component
 
         $this->todos = $user->todos()
             ->with('habit:id,name')
+            ->select('todos.*')
+            ->addSelect([
+                'habit_completed_todos_count' => Todo::select(DB::raw('count(*)'))
+                    ->whereColumn('habit_id', 'todos.habit_id')
+                    ->where('status', 'completed'),
+            ])
             ->whereDate('due_date', Carbon::today())
             ->orderByRaw("status = 'completed' ASC")
             ->orderBy('created_at', 'desc')
-            ->get(['id', 'target_count', 'completed_count', 'status', 'habit_id', 'due_date']);
+            ->get();
     }
 
     public function render()
