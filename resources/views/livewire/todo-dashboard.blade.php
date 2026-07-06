@@ -51,6 +51,17 @@
 
 @script
 <script>
+    if (window.navigator.standalone) {
+        window.addEventListener('pageshow', function(e) {
+            if (e.persisted) {
+                setTimeout(function() {
+                    $wire.$refresh();
+                }, 100);
+            }
+        });
+    }
+
+
     window.activateSlide = function(todoId) {
         var item = document.getElementById('todo-' + todoId);
         if (!item) return;
