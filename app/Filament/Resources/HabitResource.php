@@ -109,9 +109,11 @@ class HabitResource extends Resource
             ->selectable(false)
             ->actions([
                 EditAction::make()
+                    ->iconButton()
                     ->modalHeading('Edit Habit')
                     ->modalWidth('2xl'),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->iconButton(),
             ]);
     }
 

@@ -4,9 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CompletionResource\Pages\ListCompletions;
 use App\Models\Completion;
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms;
 use Filament\Resources\Resource;
@@ -71,13 +69,10 @@ class CompletionResource extends Resource
             ->defaultSort('completed_at', 'desc')
             ->actions([
                 EditAction::make()
+                    ->iconButton()
                     ->modalWidth('2xl'),
-                DeleteAction::make(),
-            ])
-            ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                DeleteAction::make()
+                    ->iconButton(),
             ]);
     }
 

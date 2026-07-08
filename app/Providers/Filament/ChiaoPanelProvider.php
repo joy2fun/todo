@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Settings;
+use App\Filament\Widgets\HomeLink;
 use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -41,7 +42,9 @@ class ChiaoPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->widgets([])
+            ->widgets([
+                HomeLink::class,
+            ])
             ->userMenuItems([
                 Action::make('settings')
                     ->url(fn (): string => Settings::getUrl())

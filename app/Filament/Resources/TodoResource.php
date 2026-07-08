@@ -104,8 +104,8 @@ class TodoResource extends Resource
             ])
             ->actions([
                 Action::make('logCompletion')
-                    ->label('Log Completion')
                     ->icon('heroicon-o-plus-circle')
+                    ->iconButton()
                     ->color('success')
                     ->requiresConfirmation()
                     ->modalHeading('Log Completion')
@@ -118,8 +118,10 @@ class TodoResource extends Resource
                     })
                     ->visible(fn (Todo $record): bool => $record->status === 'pending'),
                 EditAction::make()
+                    ->iconButton()
                     ->modalWidth('2xl'),
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->iconButton(),
             ])
             ->selectable(false);
     }
