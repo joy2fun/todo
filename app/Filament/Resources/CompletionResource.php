@@ -36,9 +36,6 @@ class CompletionResource extends Resource
                             ->required()
                             ->disabled()
                             ->columnSpanFull(),
-                        Forms\Components\DateTimePicker::make('completed_at')
-                            ->required()
-                            ->columnSpanFull(),
                         Forms\Components\Textarea::make('note')
                             ->rows(3)
                             ->maxLength(1000)

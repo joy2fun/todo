@@ -4,7 +4,7 @@
         <a href="/chiao" style="color:#839496; font-size:0.9rem">
             <x-filament::icon
             icon="heroicon-o-cog"
-            style="width: 1.2rem; height: 1.2rem;"
+            style="width: 1.5rem; height: 1.5rem;"
         /></a>
     </div>
 
