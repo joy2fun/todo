@@ -32,66 +32,75 @@ class ContributionsChart extends Widget
         $startDate = Carbon::now()->subDays(179)->startOfWeek(Carbon::MONDAY);
         $endDate = Carbon::now()->endOfWeek(Carbon::SUNDAY);
 
-        $todos = Todo::where('user_id', $userId)
+        $todosByDate = Todo::where('user_id', $userId)
             ->where('due_date', '>=', $startDate)
             ->where('due_date', '<=', $endDate)
             ->get()
-            ->keyBy(fn (Todo $todo): string => $todo->due_date->format('Y-m-d'));
+            ->groupBy(fn (Todo $todo): string => $todo->due_date->format('Y-m-d'));
 
         $period = CarbonPeriod::create($startDate, $endDate);
 
         $days = [];
         foreach ($period as $date) {
             $key = $date->format('Y-m-d');
-            $todo = $todos[$key] ?? null;
+            $dayTodos = $todosByDate[$key] ?? collect();
 
             $days[] = [
-                'date' => $date->format('Y-m-d'),
-                'color' => $this->getColorForTodo($todo),
-                'label' => $this->getLabelForTodo($todo, $date),
+                'date' => $key,
+                'color' => $this->getColorForTodos($dayTodos),
+                'label' => $this->getLabelForTodos($dayTodos, $date),
             ];
         }
 
         return array_chunk($days, 7);
     }
 
-    private function getColorForTodo(?Todo $todo): string
+    private function getColorForTodos($todos): string
     {
-        if ($todo === null) {
+        if ($todos->isEmpty()) {
             return 'contrib-none';
         }
 
-        if ($todo->completed_count >= $todo->target_count) {
+        $totalTarget = $todos->sum('target_count');
+        $totalCompleted = $todos->sum('completed_count');
+
+        if ($totalCompleted >= $totalTarget) {
             return 'contrib-completed';
         }
 
-        if ($todo->completed_count > 0) {
+        if ($totalCompleted > 0) {
             return 'contrib-partial';
         }
 
-        if ($todo->status === 'skipped') {
+        if ($todos->contains('status', 'skipped')) {
             return 'contrib-skipped';
         }
 
         return 'contrib-pending';
     }
 
-    private function getLabelForTodo(?Todo $todo, Carbon $date): string
+    private function getLabelForTodos($todos, Carbon $date): string
     {
-        if ($todo === null) {
+        if ($todos->isEmpty()) {
             return $date->format('M j, Y').' - No task';
         }
 
         $formatted = $date->format('M j, Y');
+        $totalTarget = $todos->sum('target_count');
+        $totalCompleted = $todos->sum('completed_count');
 
-        if ($todo->completed_count >= $todo->target_count) {
-            return $formatted.' - Completed ('.$todo->completed_count.'/'.$todo->target_count.')';
+        if ($totalCompleted >= $totalTarget) {
+            return $formatted.' - All habits completed';
         }
 
-        if ($todo->status === 'skipped') {
+        if ($totalCompleted > 0) {
+            return $formatted.' - '.$totalCompleted.'/'.$totalTarget.' completed';
+        }
+
+        if ($todos->contains('status', 'skipped')) {
             return $formatted.' - Skipped';
         }
 
-        return $formatted.' - '.$todo->completed_count.'/'.$todo->target_count.' completed';
+        return $formatted.' - Pending';
     }
 }

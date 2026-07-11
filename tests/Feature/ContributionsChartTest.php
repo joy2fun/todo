@@ -24,20 +24,20 @@ class ContributionsChartTest extends TestCase
             ->assertStatus(200);
     }
 
-    public function test_widget_shows_completed_todo_in_green(): void
+    public function test_widget_shows_all_completed_day(): void
     {
         $user = User::factory()->create();
         $habit = Habit::factory()->create([
             'user_id' => $user->id,
-            'target_count' => 1,
+            'target_count' => 2,
         ]);
 
         Todo::factory()->create([
             'user_id' => $user->id,
             'habit_id' => $habit->id,
             'due_date' => now()->subDay(),
-            'target_count' => 1,
-            'completed_count' => 1,
+            'target_count' => 2,
+            'completed_count' => 2,
             'status' => 'completed',
         ]);
 
@@ -47,7 +47,37 @@ class ContributionsChartTest extends TestCase
             ->assertSee('contrib-completed');
     }
 
-    public function test_widget_shows_pending_todo(): void
+    public function test_widget_shows_partial_day_with_multiple_habits(): void
+    {
+        $user = User::factory()->create();
+        $habit1 = Habit::factory()->create(['user_id' => $user->id, 'target_count' => 1]);
+        $habit2 = Habit::factory()->create(['user_id' => $user->id, 'target_count' => 1]);
+
+        Todo::factory()->create([
+            'user_id' => $user->id,
+            'habit_id' => $habit1->id,
+            'due_date' => now()->subDay(),
+            'target_count' => 1,
+            'completed_count' => 1,
+            'status' => 'completed',
+        ]);
+
+        Todo::factory()->create([
+            'user_id' => $user->id,
+            'habit_id' => $habit2->id,
+            'due_date' => now()->subDay(),
+            'target_count' => 1,
+            'completed_count' => 0,
+            'status' => 'pending',
+        ]);
+
+        $this->actingAs($user);
+
+        Livewire::test(ContributionsChart::class)
+            ->assertSee('contrib-partial');
+    }
+
+    public function test_widget_shows_pending_day(): void
     {
         $user = User::factory()->create();
         $habit = Habit::factory()->create([
@@ -68,29 +98,6 @@ class ContributionsChartTest extends TestCase
 
         Livewire::test(ContributionsChart::class)
             ->assertSee('contrib-pending');
-    }
-
-    public function test_widget_shows_partial_completion(): void
-    {
-        $user = User::factory()->create();
-        $habit = Habit::factory()->create([
-            'user_id' => $user->id,
-            'target_count' => 5,
-        ]);
-
-        Todo::factory()->create([
-            'user_id' => $user->id,
-            'habit_id' => $habit->id,
-            'due_date' => now()->subDay(),
-            'target_count' => 5,
-            'completed_count' => 3,
-            'status' => 'pending',
-        ]);
-
-        $this->actingAs($user);
-
-        Livewire::test(ContributionsChart::class)
-            ->assertSee('contrib-partial');
     }
 
     public function test_widget_shows_skipped_todo(): void
