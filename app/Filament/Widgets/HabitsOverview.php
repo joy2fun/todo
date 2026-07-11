@@ -21,6 +21,7 @@ class HabitsOverview extends BaseWidget
 
         return $table
             ->query(Habit::where('user_id', $userId))
+            ->heading(__('Habits'))
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label(''),
                 Tables\Columns\TextColumn::make('completed_days')
@@ -34,16 +35,18 @@ class HabitsOverview extends BaseWidget
                     ->label('')
                     ->icon('heroicon-m-fire')
                     ->iconColor('warning')
-                    ->state(fn (Habit $record): string => $this->calculateStreak($record->id).' days'),
+                    ->state(fn (Habit $record): string => $this->calculateStreak($record).' days'),
             ])
             ->striped()
             ->paginated(false)
             ->defaultSort('id', 'desc');
     }
 
-    private function calculateStreak(int $habitId): int
+    private function calculateStreak(Habit $habit): int
     {
-        $dates = Todo::where('habit_id', $habitId)
+        $scheduleDays = $habit->schedule_days;
+
+        $dates = Todo::where('habit_id', $habit->id)
             ->whereColumn('completed_count', '>=', 'target_count')
             ->where('due_date', '<=', Carbon::today())
             ->orderByDesc('due_date')
@@ -56,18 +59,24 @@ class HabitsOverview extends BaseWidget
             return 0;
         }
 
-        $first = $dates->first();
-        $today = Carbon::today();
+        $dates = $dates->filter(fn (Carbon $date) => in_array((int) $date->dayOfWeek, $scheduleDays, true))
+            ->values();
 
-        if ($first->lt($today->copy()->subDay())) {
+        if ($dates->isEmpty()) {
+            return 0;
+        }
+
+        $mostRecentScheduled = $this->getMostRecentScheduledDay($scheduleDays);
+
+        if ($dates->first()->lt($this->getPreviousScheduledDay($mostRecentScheduled, $scheduleDays))) {
             return 0;
         }
 
         $streak = 1;
-        $current = $first;
+        $current = $dates->first();
 
         foreach ($dates->skip(1) as $date) {
-            if ($current->diffInDays($date) === 1) {
+            if ($date->eq($this->getPreviousScheduledDay($current, $scheduleDays))) {
                 $streak++;
                 $current = $date;
             } else {
@@ -76,5 +85,30 @@ class HabitsOverview extends BaseWidget
         }
 
         return $streak;
+    }
+
+    private function getMostRecentScheduledDay(array $scheduleDays): Carbon
+    {
+        $today = Carbon::today();
+
+        if (in_array((int) $today->dayOfWeek, $scheduleDays, true)) {
+            return $today;
+        }
+
+        return $this->getPreviousScheduledDay($today, $scheduleDays);
+    }
+
+    private function getPreviousScheduledDay(Carbon $date, array $scheduleDays): Carbon
+    {
+        $prev = $date->copy()->subDay();
+
+        for ($i = 0; $i < 7; $i++) {
+            if (in_array((int) $prev->dayOfWeek, $scheduleDays, true)) {
+                return $prev;
+            }
+            $prev->subDay();
+        }
+
+        return $prev;
     }
 }
