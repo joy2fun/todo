@@ -28,7 +28,14 @@ Route::any('/echo', function (Request $request) {
     ]);
 
     return response('', Response::HTTP_NO_CONTENT);
-});
+})->withoutMiddleware([
+    EncryptCookies::class,
+    AddQueuedCookiesToResponse::class,
+    StartSession::class,
+    ShareErrorsFromSession::class,
+    PreventRequestForgery::class,
+    SubstituteBindings::class,
+]);
 
 Route::any('/{endpointPath}', EndpointController::class)
     ->where('endpointPath', '.*')
