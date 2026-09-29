@@ -46,7 +46,7 @@ jobs:
           token: ${{ secrets.PAT }}
           client-payload: |-
             {
-              "host": "w1",
+              "host": "w2",
               "project": "${{ env.project }}",
               "type": "filament",
               "branch": "${{ github.ref_name }}"
